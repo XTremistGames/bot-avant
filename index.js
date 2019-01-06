@@ -72,7 +72,7 @@ bot.on("ready", async () => {
   //bot.user.setGame("on SourceCade!");
 });
 
-bot.login(tokenfile.token);
+bot.login(process.env.token);
 
 
 
