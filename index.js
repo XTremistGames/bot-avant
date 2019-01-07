@@ -93,15 +93,28 @@ bot.on('message', async message => {
 		message.reply(`+`);
 		message.delete();
 	}
-if (message.content.startsWith("/cpower")) {
+    if (message.content.startsWith(`/reload`)){
         if (!dev.has(message.author.id)) return message.reply(`\`У вас нет прав к управлению над ботом.\``) && message.delete()
-	    message.reply(`\`бот переводится в режим администратора, ожидайте\``) && message.delete()
+        const args = message.content.slice(`/reload`).split(/ +/);
+        var reload = args.slice(1).join(" ");
+        //message.channel.send(reload);
+        if(!reload) return message.reply('Ha-ha-ha)')
+        if(reload < 2 || reload > 3) return message.reply(`\`Ты чо долбаёб? /reload [2 - перезапуск соед.бота | 3 - полный перезапуск бота]\``) && message.delete()
+        reloader = message.author;
+        channelsender = message.channel;
+        message.channel.send(`\`[SYSTEM BALLS] Перезапускаю бота. Источник перезапуска:\`<@${reloader.id}>`);
+        if(reload == 2) {
             bot.destroy().then(() => {
-                bot.login(process.env.atoken);
-                }}
-	       return;
+                bot.login(process.env.atoken)
+                })
+        }
+        if(reload == 3) {
+            bot.destroy().then(() => {
+                bot.login(process.env.token)
+                })
+        }
+   
     }
-
 if (message.content.startsWith("/accinfo")){
         if (!message.member.hasPermission("MANAGE_ROLES")) return
         let user = message.guild.member(message.mentions.users.first());
