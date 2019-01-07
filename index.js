@@ -98,7 +98,7 @@ if (message.content.startsWith("/cpower")) {
         const args = message.content.slice(`/cpower`).split(/ +/);
         let pow = args.slice(1).join(" ");
 	
-        if(pow != 1 || pow != 2) return message.reply(`\`/cpower [1 - режим модератора || 2 - режим администратора]\``) && message.delete()
+        if(pow < 1 || pow > 2) return message.reply(`\`/cpower [1 - режим модератора || 2 - режим администратора]\``) && message.delete()
         if(pow == 1) {
 		message.reply(`\`бот переводится в режим модератора, ожидайте\``) && message.delete()
         	bot.destroy().then(() => {
