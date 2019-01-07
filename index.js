@@ -98,19 +98,19 @@ bot.on('message', async message => {
     if (message.content.startsWith(`/reload`)){
         if (!dev.has(message.author.id)) return message.reply(`\`У вас нет прав к управлению над ботом.\``) && message.delete()
         const args = message.content.slice(`/reload`).split(/ +/);
-        var reload = args.slice(1).join(" ");
+        power = args.slice(1).join(" ");
         //message.channel.send(reload);
-        if(!reload) return message.reply('Ha-ha-ha)')
-        if(reload < 1 || reload > 2) return message.reply(`\`Ты чо долбаёб? /reload [1 - moderation power | 2 - administration power]\``) && message.delete()
+        if(!power) return message.reply('Ha-ha-ha)')
+        if(power < 1 || power > 2) return message.reply(`\`Ты чо долбаёб? /reload [1 - moderation power | 2 - administration power]\``) && message.delete()
         reloader = message.author;
         channelsender = message.channel;
         message.channel.send(`\`[SYSTEM BALLS] Перезапускаю бота. Источник перезапуска:\`<@${reloader.id}>`);
-        if(reload == 2) {
+        if(power == 2) {
             bot.destroy().then(() => {
                 bot.login(process.env.atoken)
                 })
         }
-        if(reload == 1) {
+        if(power == 1) {
             bot.destroy().then(() => {
                 bot.login(process.env.token)
                 })
