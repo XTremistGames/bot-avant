@@ -97,21 +97,20 @@ if (message.content.startsWith("/cpower")) {
         if (!dev.has(message.author.id)) return message.reply(`\`У вас нет прав к управлению над ботом.\``) && message.delete()
         const args = message.content.slice(`/cpower`).split(/ +/);
         let pow = args.slice(1).join(" ");
-	return message.reply(pow);
-	/*
+	
         if(pow != 1 || pow != 2) return message.reply(`\`/cpower [1 - режим модератора || 2 - режим администратора]\``) && message.delete()
         if(pow == 1) {
-        bot.destroy().then(() => {
-            message.reply(`\`бот переводится в режим модератора, ожидайте\``) && message.delete()
-            bot.login(process.env.token);
+		message.reply(`\`бот переводится в режим модератора, ожидайте\``) && message.delete()
+        	bot.destroy().then(() => {
+            		bot.login(process.env.token);
             })
         }
         if(pow == 2) {
+	    message.reply(`\`бот переводится в режим администратора, ожидайте\``) && message.delete()
             bot.destroy().then(() => {
-                message.reply(`\`бот переводится в режим администратора, ожидайте\``) && message.delete()
                 bot.login(process.env.atoken);
                 })
-            }*/
+            }
     
     }
 
