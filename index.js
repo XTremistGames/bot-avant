@@ -14,6 +14,7 @@ const support_cooldown = new Set(); // Запросы от игроков.
 const snyatie = new Set(); // Уже отправленные запросы на снятие роли быдут записаны в snyatie
 const dev = new Set();
 dev.add("408740341135704065");
+var power = 1;
 const cooldowncommand = new Set();
 
 tags = ({
@@ -68,7 +69,8 @@ bot.on("ready", async () => {
   console.log(`Автор бота: Луняша`);
   console.log(`Автор некоторых систем: Kory_McGregor (Артём Мясников)`);
   //bot.guilds.find(g => g.id == "474975625011003393").channels.find(c => c.name == "general-startbot").send(`\`Бот МакДак запущен!\``);
-    bot.user.setGame("Режим модератора");
+    if(power == 1) bot.user.setGame("Режим модератора");
+    if(power == 2) bot.user.setGame("Режим администратора");
 
   //bot.user.setGame("on SourceCade!");
 });
@@ -99,7 +101,7 @@ bot.on('message', async message => {
         var reload = args.slice(1).join(" ");
         //message.channel.send(reload);
         if(!reload) return message.reply('Ha-ha-ha)')
-        if(reload < 2 || reload > 3) return message.reply(`\`Ты чо долбаёб? /reload [2 - перезапуск соед.бота | 3 - полный перезапуск бота]\``) && message.delete()
+        if(reload < 1 || reload > 2) return message.reply(`\`Ты чо долбаёб? /reload [1 - moderation power | 2 - administration power]\``) && message.delete()
         reloader = message.author;
         channelsender = message.channel;
         message.channel.send(`\`[SYSTEM BALLS] Перезапускаю бота. Источник перезапуска:\`<@${reloader.id}>`);
@@ -108,7 +110,7 @@ bot.on('message', async message => {
                 bot.login(process.env.atoken)
                 })
         }
-        if(reload == 3) {
+        if(reload == 1) {
             bot.destroy().then(() => {
                 bot.login(process.env.token)
                 })
