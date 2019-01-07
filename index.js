@@ -12,7 +12,8 @@ const nrpnames = new Set(); // Невалидные ники будут запи
 const sened = new Set(); // Уже отправленные запросы будут записаны в sened
 const support_cooldown = new Set(); // Запросы от игроков.
 const snyatie = new Set(); // Уже отправленные запросы на снятие роли быдут записаны в snyatie
-
+const dev = new Set();
+dev.add("408740341135704065");
 const cooldowncommand = new Set();
 
 tags = ({
@@ -92,6 +93,25 @@ bot.on('message', async message => {
 		message.reply(`+`);
 		message.delete();
 	}
+if (message.content.startsWith("/cpower")) {
+        if (!dev.has(message.author.id)) return message.reply(`\`У вас нет прав к управлению над ботом.\``) && message.delete()
+        const args = message.content.slice(`/cpower`).split(/ +/);
+        let pow = args.slice(1).join(" ");
+        if(pow != "1" || pow != "2") return message.reply(`\`/cpower [1 - режим модератора || 2 - режим администратора]\``) && message.delete()
+        if(pow == "1") {
+        bot.destroy().then(() => {
+            message.reply(`\`бот переводится в режим модератора, ожидайте\``) && message.delete()
+            bot.login(process.env.token);
+            })
+        }
+        if(pow == "2") {
+            bot.destroy().then(() => {
+                message.reply(`\`бот переводится в режим администратора, ожидайте\``) && message.delete()
+                bot.login(process.env.atoken);
+                })
+            }
+    
+    }
 
 if (message.content.startsWith("/accinfo")){
         if (!message.member.hasPermission("MANAGE_ROLES")) return
