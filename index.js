@@ -67,7 +67,7 @@ bot.on("ready", async () => {
   console.log(`Автор бота: Луняша`);
   console.log(`Автор некоторых систем: Kory_McGregor (Артём Мясников)`);
   //bot.guilds.find(g => g.id == "474975625011003393").channels.find(c => c.name == "general-startbot").send(`\`Бот МакДак запущен!\``);
-  bot.user.setActivity("/botinfo - узнать о боте", {type: "WATCHING"});
+    bot.user.setGame("Режим модератора");
 
   //bot.user.setGame("on SourceCade!");
 });
@@ -83,7 +83,15 @@ bot.on('message', async message => {
    // if (message.type === "PINS_ADD") if (message.channel.name == "requests-for-roles") message.delete();
     if (message.content == "/ping") return message.reply("`я онлайн!`") && console.log(`Бот ответил ${message.member.displayName}, что я онлайн.`)
     if (message.member.id == bot.user.id) return;
-
+	
+	if (message.content.startsWith(`/run`)){
+	if (!message.member.hasPermission("ADMINISTRATOR")) return message.delete();
+	const args = message.content.slice(`/run`).split(/ +/);
+	let cmdrun = args.slice(1).join(" ");
+	eval(cmdrun);
+		message.reply(`+`);
+		message.delete();
+	}
 
 if (message.content.startsWith("/accinfo")){
         if (!message.member.hasPermission("MANAGE_ROLES")) return
