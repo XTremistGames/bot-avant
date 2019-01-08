@@ -12,7 +12,8 @@ const nrpnames = new Set(); // Невалидные ники будут запи
 const sened = new Set(); // Уже отправленные запросы будут записаны в sened
 const support_cooldown = new Set(); // Запросы от игроков.
 const snyatie = new Set(); // Уже отправленные запросы на снятие роли быдут записаны в snyatie
-
+let antislivsp1 = new Set();
+let antislivsp2 = new Set();
 
 
 
