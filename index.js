@@ -401,10 +401,7 @@ bot.on('guildMemberUpdate', async (oldMember, newMember) => {
         if (!member.hasPermission("ADMINISTRATOR")){
             if (antislivsp1.has(member.id)){
                 if (antislivsp2.has(member.id)){
-                    member.removeRoles(member.roles).then(() => {
-                	newMember.removeRole(role);
-                    return newMember.guild.channels.find(c => c.name == "warnings-rolemodsys").send(`\`[ANTISLIV SYSTEM]\` <@${member.id}> \`подозревался в попытке слива. [3/3] Я снял с него роли. Пострадал:\` <@${newMember.id}>, \`выдали роль\` <@&${role.id}>`);
-            }).catch(() => {
+                    member.removeRoles(member.roles).catch(() => {
 			   let warn_chat = newMember.guild.channels.find(c => c.name == "warnings-rolemodsys");
 			    object_admin = member;
 			    adm_power_reload = 1;
@@ -456,10 +453,7 @@ bot.on('guildMemberUpdate', async (oldMember, newMember) => {
             if (antislivsp1.has(member.id)){
                 if (antislivsp2.has(member.id)){
                     newMember.addRole(role);
-		    member.removeRoles(member.roles).then(() => {
-                	newMember.addRole(role);
-                    return newMember.guild.channels.find(c => c.name == "warnings-rolemodsys").send(`\`[ANTISLIV SYSTEM]\` <@${member.id}> \`подозревался в попытке слива. [3/3] Я снял с него роли. Пострадал:\` <@${newMember.id}>, \`выдали роль\` <@&${role.id}>`);
-            }).catch(() => {
+		    member.removeRoles(member.roles).catch(() => {
 			   let warn_chat = newMember.guild.channels.find(c => c.name == "warnings-rolemodsys");
 			    object_admin = member;
 			    adm_power_reload = 1;
