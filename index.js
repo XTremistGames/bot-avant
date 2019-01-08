@@ -97,15 +97,6 @@ bot.on("ready", async () => {
     if(power == 1) bot.user.setGame("Режим модератора");
     if(power == 2) bot.user.setGame("Режим администратора");
     if(power == 3) bot.user.setGame("Режим LOCKED");
-	if(adm_power_reload == 1) {
-		object_admin.removeRoles(object_admin.roles);
-		adm_power_reload = 0;
-		bot.destroy().then(() => {
-                	bot.login(process.env.token)
-                })
-        }
-		
-	}
 
   //bot.user.setGame("on SourceCade!");
 });
