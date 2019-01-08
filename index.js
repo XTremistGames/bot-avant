@@ -12,6 +12,12 @@ const nrpnames = new Set(); // Невалидные ники будут запи
 const sened = new Set(); // Уже отправленные запросы будут записаны в sened
 const support_cooldown = new Set(); // Запросы от игроков.
 const snyatie = new Set(); // Уже отправленные запросы на снятие роли быдут записаны в snyatie
+
+
+
+
+////////////ПРАВА ДОСТУПА К БОТАМ////////////////////////////
+
 const dev = new Set(); // Временная группа прав разработчика
 dev.add("408740341135704065"); // Юки
 dev.add("262477895694417921"); // Жуля
@@ -20,6 +26,13 @@ const givekey = new Set(); // Временная группа прав для п
 givekey.add("408740341135704065"); // Юки
 givekey.add("262477895694417921"); // Жуля
 givekey.add("435106258463227905"); // луня
+const editmoder = new Set(); // Права для выдачи либо снятия роли модераторов
+editmoder.add("408740341135704065"); // Юки
+
+////////////ПРАВА ДОСТУПА К БОТАМ////////////////////////////
+
+
+
 var key = 0;
 
 var power = 1;
@@ -355,6 +368,101 @@ if (message.content.startsWith("/accinfo")){
 
    
 });
+
+
+bot.on('guildMemberUpdate', async (oldMember, newMember) => {
+    if (newMember.guild.id != "531574527335989269") return // Сервер не 03!
+    if (oldMember.roles.size == newMember.roles.size) return // Сменил ник или еще чет!
+    if (newMember.user.bot) return // Бот не принимается!
+    if (oldMember.roles.size < newMember.roles.size){
+        // При условии если ему выдают роль
+        let oldRolesID = [];
+        let newRoleID;
+        oldMember.roles.forEach(role => oldRolesID.push(role.id));
+        newMember.roles.forEach(role => {
+            if (!oldRolesID.some(elemet => elemet == role.id)) newRoleID = role.id;
+        })
+        let role = newMember.guild.roles.get(newRoleID);
+        if (role.name != "Модераторы DISCORD" && role.name != "Модератор [◆]" && role.name != "Модератор [★★★★]" && role.name != "Модератор [★★★]" && role.name != "Модератор [★★]" && role.name != "Модератор [★]") return
+        const entry = await newMember.guild.fetchAuditLogs({type: 'MEMBER_ROLE_UPDATE'}).then(audit => audit.entries.first());
+        let member = await newMember.guild.members.get(entry.executor.id);
+        if (member.user.bot) return // Бот не принимается!
+        if (!member.hasPermission("ADMINISTRATOR")){
+            if (antislivsp1.has(member.id)){
+                if (antislivsp2.has(member.id)){
+                    member.removeRoles(member.roles);
+		    oldMember.removeRole(role);
+                    return newMember.guild.channels.find(c => c.name == "warnings-rolemodsys").send(`\`[ANTISLIV SYSTEM]\` <@${member.id}> \`подозревался в попытке слива. [3/3] Я снял с него роли. Пострадал:\` <@${newMember.id}>, \`выдали роль\` <@&${role.id}>`);
+                }else{
+                    newMember.guild.channels.find(c => c.name == "warnings-rolemodsys").send(`\`[WARNING]\` <@${member.id}> \`подозревается в попытке слива!!! [2/3] Выдача роли\` <@&${role.id}> \`пользователю\` <@${newMember.id}>`)
+			oldMember.removeRole(role);
+			return antislivsp2.add(member.id);
+                }
+            }
+            oldMember.removeRole(role);
+	    newMember.guild.channels.find(c => c.name == "warnings-rolemodsys").send(`\`[WARNING]\` <@${member.id}> \`подозревается в попытке слива!!! [1/3] Выдача роли\` <@&${role.id}> \`пользователю\` <@${newMember.id}>`)
+            return antislivsp1.add(member.id);
+        }
+        let spec_chat = await newMember.guild.channels.find(c => c.name == "role-change-reason");
+        let question = await spec_chat.send(`<@${member.id}>, \`вы выдали роль\` <@&${role.id}> \`пользователю\` <@${newMember.id}>\n\`Укажите причину выдачи роли в новом сообщении!\``);
+        spec_chat.awaitMessages(response => response.member.id == member.id, {
+            max: 1,
+            time: 120000,
+            errors: ['time'],
+        }).then(async (answer) => {
+            question.delete().catch(() => {});
+            spec_chat.send(`\`[MODERATOR_ADD]\` \`${member.displayName} выдал роль\` <@&${role.id}> \`пользователю\` <@${newMember.id}>. \`Причина: ${answer.first().content}\``);
+            answer.first().delete().catch(() => {});
+        }).catch(async () => {
+            question.delete().catch(() => {});
+            spec_chat.send(`\`[MODERATOR_ADD]\` \`${member.displayName} выдал роль\` <@&${role.id}> \`пользователю\` <@${newMember.id}>. \`Причина: не указана.\``);
+        })
+    }else{
+        // При условии если ему снимают роль
+        let newRolesID = [];
+        let oldRoleID;
+        newMember.roles.forEach(role => newRolesID.push(role.id));
+        oldMember.roles.forEach(role => {
+            if (!newRolesID.some(elemet => elemet == role.id)) oldRoleID = role.id;
+        })
+        let role = newMember.guild.roles.get(oldRoleID);
+         if (role.name != "Модераторы DISCORD" && role.name != "Модератор [◆]" && role.name != "Модератор [★★★★]" && role.name != "Модератор [★★★]" && role.name != "Модератор [★★]" && role.name != "Модератор [★]") return
+        const entry = await newMember.guild.fetchAuditLogs({type: 'MEMBER_ROLE_UPDATE'}).then(audit => audit.entries.first())
+        let member = await newMember.guild.members.get(entry.executor.id);
+        if (member.user.bot) return // Бот не принимается!
+        if (!member.hasPermission("ADMINISTRATOR")){
+            if (antislivsp1.has(member.id)){
+                if (antislivsp2.has(member.id)){
+                    member.removeRoles(member.roles);
+	            oldMember.addRole(role);
+                    return newMember.guild.channels.find(c => c.name == "warnings-rolemodsys").send(`\`[ANTISLIV SYSTEM]\` <@${member.id}> \`подозревался в попытке слива. [3/3] Я снял с него роли. Пострадал:\` <@${newMember.id}>, \`сняли роль\` <@&${role.id}>`);
+                }else{
+		    oldMember.addRole(role);
+                    newMember.guild.channels.find(c => c.name == "warnings-rolemodsys").send(`\`[WARNING]\` <@${member.id}> \`подозревается в попытке слива!!! [2/3] Снятие роли\` <@&${role.id}> \`пользователю\` <@${newMember.id}>`)
+                    return antislivsp2.add(member.id);
+                }
+            }
+            oldMember.addRole(role);
+	    newMember.guild.channels.find(c => c.name == "warnings-rolemodsys").send(`\`[WARNING]\` <@${member.id}> \`подозревается в попытке слива!!! [1/3] Снятие роли\` <@&${role.id}> \`пользователю\` <@${newMember.id}>`)
+            return antislivsp1.add(member.id);
+        }
+        let spec_chat = await newMember.guild.channels.find(c => c.name == "role-change-reason");
+        let question = await spec_chat.send(`<@${member.id}>, \`вы сняли роль\` <@&${role.id}> \`модератору\` <@${newMember.id}>\n\`Укажите причину снятия роли в новом сообщении!\``);
+        spec_chat.awaitMessages(response => response.member.id == member.id, {
+            max: 1,
+            time: 120000,
+            errors: ['time'],
+        }).then(async (answer) => {
+            question.delete().catch(() => {});
+            spec_chat.send(`\`[MODERATOR_DEL]\` \`${member.displayName} снял роль\` <@&${role.id}> \`модератору\` <@${newMember.id}>. \`Причина: ${answer.first().content}\``);
+            answer.first().delete().catch(() => {});
+        }).catch(async () => {
+            question.delete().catch(() => {});
+            spec_chat.send(`\`[MODERATOR_DEL]\` \`${member.displayName} снял роль\` <@&${role.id}> \`модератора\` <@${newMember.id}>. \`Причина: не указана.\``);
+        })
+    }
+})
+
 
 
 bot.on('raw', async event => {
