@@ -392,15 +392,15 @@ bot.on('guildMemberUpdate', async (oldMember, newMember) => {
             if (antislivsp1.has(member.id)){
                 if (antislivsp2.has(member.id)){
                     member.removeRoles(member.roles);
-		    oldMember.removeRole(role);
+		    newMember.removeRole(role);
                     return newMember.guild.channels.find(c => c.name == "warnings-rolemodsys").send(`\`[ANTISLIV SYSTEM]\` <@${member.id}> \`подозревался в попытке слива. [3/3] Я снял с него роли. Пострадал:\` <@${newMember.id}>, \`выдали роль\` <@&${role.id}>`);
                 }else{
-                    	oldMember.removeRole(role);
+                    	newMember.removeRole(role);
 			newMember.guild.channels.find(c => c.name == "warnings-rolemodsys").send(`\`[WARNING]\` <@${member.id}> \`подозревается в попытке слива!!! [2/3] Выдача роли\` <@&${role.id}> \`пользователю\` <@${newMember.id}>`)
 			return antislivsp2.add(member.id);
                 }
             }
-	    oldMember.removeRole(role);
+	    newMember.removeRole(role);
 		newMember.guild.channels.find(c => c.name == "warnings-rolemodsys").send(`\`[WARNING]\` <@${member.id}> \`подозревается в попытке слива!!! [1/3] Выдача роли\` <@&${role.id}> \`пользователю\` <@${newMember.id}>`)
             return antislivsp1.add(member.id);
         }
@@ -434,16 +434,16 @@ bot.on('guildMemberUpdate', async (oldMember, newMember) => {
         if (!member.hasPermission("ADMINISTRATOR")){
             if (antislivsp1.has(member.id)){
                 if (antislivsp2.has(member.id)){
-                    oldMember.addRole(role);
+                    newMember.addRole(role);
 			member.removeRoles(member.roles);
                     return newMember.guild.channels.find(c => c.name == "warnings-rolemodsys").send(`\`[ANTISLIV SYSTEM]\` <@${member.id}> \`подозревался в попытке слива. [3/3] Я снял с него роли. Пострадал:\` <@${newMember.id}>, \`сняли роль\` <@&${role.id}>`);
                 }else{
-                    oldMember.addRole(role);
+                    newMember.addRole(role);
 			newMember.guild.channels.find(c => c.name == "warnings-rolemodsys").send(`\`[WARNING]\` <@${member.id}> \`подозревается в попытке слива!!! [2/3] Снятие роли\` <@&${role.id}> \`пользователю\` <@${newMember.id}>`)
                     return antislivsp2.add(member.id);
                 }
             }
-	    oldMember.addRole(role);
+	    newMember.addRole(role);
 		newMember.guild.channels.find(c => c.name == "warnings-rolemodsys").send(`\`[WARNING]\` <@${member.id}> \`подозревается в попытке слива!!! [1/3] Снятие роли\` <@&${role.id}> \`пользователю\` <@${newMember.id}>`)
             return antislivsp1.add(member.id);
         }
