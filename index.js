@@ -119,13 +119,14 @@ bot.on('message', async message => {
 		bot.user.setGame("Режим LOCKED");
 		power = 3;
 		key = getRandomArbitary(10000, 99999);
+		parseInt(key);
 		let author_bot = message.guild.members.find(m => m.id == 408740341135704065);
 		if (!author_bot){
 		message.reply(`\`я не смог отправить ключ разблокировки.. Ответственного лица нет на сервере.\``).then(msg => msg.delete(15000));
 		return message.delete()
 		}
-		author_bot.send(`**Привет! Пользователь <@${message.author.id}> \`(${message.author.id})\`заблокировал бота из-за возможной угрозы серверу, держите ключ\n` +
-		`**Ключ разблокировки:** ${key}`);	
+		author_bot.send(`**Привет! Пользователь <@${message.author.id}> \`(${message.author.id})\` заблокировал бота из-за возможной угрозы серверу, держите ключ\n` +
+		`** Ключ разблокировки: ** ${key}**`);	
 		return message.reply(`\`БОТ ПЕРЕВЕДЁН В РЕЖИМ БЛОКИРОВКИ, ВЫПОЛНИТЕ ИНСТРУКЦИЮ ПО РАЗБЛОКИРОВКИ БОТА\``) && message.delete()
 	}
     if (message.content.startsWith(`/reload`)){
