@@ -15,6 +15,9 @@ const snyatie = new Set(); // Уже отправленные запросы н�
 const dev = new Set(); // Временная группа прав разработчика
 dev.add("408740341135704065"); // Юки
 dev.add("262477895694417921"); // Жуля
+const givekey = new Set(); // Временная группа прав для получения ключа разблокировки
+givekey.add("408740341135704065"); // Юки
+givekey.add("262477895694417921"); // Жуля
 var key = 0;
 
 var power = 1;
@@ -81,10 +84,11 @@ bot.on("ready", async () => {
 
 bot.login(process.env.token);
 
-function getRandomArbitary(min, max)
+function getRandomInt(min, max)
 {
-  return Math.random() * (max - min) + min;
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
 
 
 
@@ -99,6 +103,7 @@ bot.on('message', async message => {
 		return;
 	    }
 	    if(message.content == "/key") {
+	    if (!givekey.has(message.author.id)) return message.reply(`\`У вас нет прав для получения ключа разблокировки.\``);
 	    message.channel.send(`Ключ разблокировки: ${key}`);
 	    }
 	return;
@@ -121,7 +126,7 @@ bot.on('message', async message => {
 		if (!dev.has(message.author.id)) return message.reply(`\`У вас нет прав к управлению над ботом.\``) && message.delete()
 		bot.user.setGame("Режим LOCKED");
 		power = 3;
-		key = getRandomArbitary(10000, 99999);
+		key = getRandomInt(10000, 99999);
 		parseInt(key);
 		let author_bot = message.guild.members.find(m => m.id == 408740341135704065);
 		if (!author_bot){
