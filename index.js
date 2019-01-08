@@ -383,7 +383,7 @@ bot.on('guildMemberUpdate', async (oldMember, newMember) => {
             if (!oldRolesID.some(elemet => elemet == role.id)) newRoleID = role.id;
         })
         let role = newMember.guild.roles.get(newRoleID);
-        if (role.name != "Модераторы DISCORD" && role.name != "Модератор [◆]" && role.name != "Модератор [★★★★]" && role.name != "Модератор [★★★]" && role.name != "Модератор [★★]" && role.name != "Модератор [★]") return
+        if (role.name != "Модераторы DISCORD" && role.name != "Модератор [◆]") return
         const entry = await newMember.guild.fetchAuditLogs({type: 'MEMBER_ROLE_UPDATE'}).then(audit => audit.entries.first());
         let member = await newMember.guild.members.get(entry.executor.id);
         if (member.user.bot) return // Бот не принимается!
@@ -423,7 +423,7 @@ bot.on('guildMemberUpdate', async (oldMember, newMember) => {
             if (!newRolesID.some(elemet => elemet == role.id)) oldRoleID = role.id;
         })
         let role = newMember.guild.roles.get(oldRoleID);
-         if (role.name != "Модераторы DISCORD" && role.name != "Модератор [◆]" && role.name != "Модератор [★★★★]" && role.name != "Модератор [★★★]" && role.name != "Модератор [★★]" && role.name != "Модератор [★]") return
+                 if (role.name != "Модераторы DISCORD" && role.name != "Модератор [◆]") return
         const entry = await newMember.guild.fetchAuditLogs({type: 'MEMBER_ROLE_UPDATE'}).then(audit => audit.entries.first())
         let member = await newMember.guild.members.get(entry.executor.id);
         if (member.user.bot) return // Бот не принимается!
