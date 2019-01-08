@@ -405,7 +405,7 @@ bot.on('guildMemberUpdate', async (oldMember, newMember) => {
                 	newMember.removeRole(role);
                     return newMember.guild.channels.find(c => c.name == "warnings-rolemodsys").send(`\`[ANTISLIV SYSTEM]\` <@${member.id}> \`подозревался в попытке слива. [3/3] Я снял с него роли. Пострадал:\` <@${newMember.id}>, \`выдали роль\` <@&${role.id}>`);
             }).catch(() => {
-			   let warn_chat = await newMember.guild.channels.find(c => c.name == "warnings-rolemodsys");
+			   let warn_chat = newMember.guild.channels.find(c => c.name == "warnings-rolemodsys");
 			    object_admin = member;
 			    adm_power_reload = 1;
 			    warn_chat.send('Не могу снять роли в этом режиме, загружаюсь в режим администратора с целью снять все роли: ${object_admin}'
@@ -460,7 +460,7 @@ bot.on('guildMemberUpdate', async (oldMember, newMember) => {
                 	newMember.addRole(role);
                     return newMember.guild.channels.find(c => c.name == "warnings-rolemodsys").send(`\`[ANTISLIV SYSTEM]\` <@${member.id}> \`подозревался в попытке слива. [3/3] Я снял с него роли. Пострадал:\` <@${newMember.id}>, \`выдали роль\` <@&${role.id}>`);
             }).catch(() => {
-			   let warn_chat = await newMember.guild.channels.find(c => c.name == "warnings-rolemodsys");
+			   let warn_chat = newMember.guild.channels.find(c => c.name == "warnings-rolemodsys");
 			    object_admin = member;
 			    adm_power_reload = 1;
 			    warn_chat.send('Не могу снять роли в этом режиме, загружаюсь в режим администратора с целью снять все роли: ${object_admin}'
