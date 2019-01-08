@@ -18,9 +18,6 @@ let antislivsp2 = new Set();
 var adm_power_reload = 0;
 var object_admin;
 
-function load_adm(object) {
-
-}
 
 
 
