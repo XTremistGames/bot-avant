@@ -15,8 +15,8 @@ const snyatie = new Set(); // Уже отправленные запросы н�
 let antislivsp1 = new Set();
 let antislivsp2 = new Set();
 
-let adm_power_reload = 0;
-let object_admin;
+var adm_power_reload = 0;
+var object_admin;
 
 
 
