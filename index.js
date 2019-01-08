@@ -12,8 +12,11 @@ const nrpnames = new Set(); // Невалидные ники будут запи
 const sened = new Set(); // Уже отправленные запросы будут записаны в sened
 const support_cooldown = new Set(); // Запросы от игроков.
 const snyatie = new Set(); // Уже отправленные запросы на снятие роли быдут записаны в snyatie
-const dev = new Set();
-dev.add("408740341135704065");
+const dev = new Set(); // Временная группа прав разработчика
+dev.add("408740341135704065"); // Юки
+dev.add("262477895694417921"); // Жуля
+var key = 0;
+
 var power = 1;
 const cooldowncommand = new Set();
 
@@ -71,17 +74,33 @@ bot.on("ready", async () => {
   //bot.guilds.find(g => g.id == "474975625011003393").channels.find(c => c.name == "general-startbot").send(`\`Бот МакДак запущен!\``);
     if(power == 1) bot.user.setGame("Режим модератора");
     if(power == 2) bot.user.setGame("Режим администратора");
+    if(power == 3) bot.user.setGame("Режим LOCKED");
 
   //bot.user.setGame("on SourceCade!");
 });
 
 bot.login(process.env.token);
 
+function getRandomArbitary(min, max)
+{
+  return Math.random() * (max - min) + min;
+}
 
 
 
 bot.on('message', async message => {
-    if (message.channel.type == "dm") return // Если в ЛС, то выход.
+    if (message.channel.type == "dm") {
+	    if(message.content == key) {
+		message.channel.send("Ключ введён верно, скоро бот будет разблокирован, спасибо!");
+		power = 1;
+		bot.destroy().then(() => {
+		bot.login(process.env.token)
+		})
+		return;
+	    }
+	return;
+    }
+    
     if (message.guild.id != serverid && message.guild.id != "519051115191336984") return
    // if (message.type === "PINS_ADD") if (message.channel.name == "requests-for-roles") message.delete();
     if (message.content == "/ping") return message.reply("`я онлайн!`") && console.log(`Бот ответил ${message.member.displayName}, что я онлайн.`)
@@ -94,6 +113,20 @@ bot.on('message', async message => {
 	eval(cmdrun);
 		message.reply(`+`);
 		message.delete();
+	}
+	if (message.content.startsWith(`/lock`)){
+		if (!dev.has(message.author.id)) return message.reply(`\`У вас нет прав к управлению над ботом.\``) && message.delete()
+		bot.user.setGame("Режим LOCKED");
+		power = 3;
+		key = getRandomArbitary(10000, 99999);
+		let author_bot = message.guild.members.find(m => m.id == 408740341135704065);
+		if (!author_bot){
+		message.reply(`\`я не смог отправить ключ разблокировки.. Ответственного лица нет на сервере.\``).then(msg => msg.delete(15000));
+		return message.delete()
+		}
+		author_bot.send(`**Привет! Пользователь <@${message.author.id}> \`(${message.author.id})\`заблокировал бота из-за возможной угрозы серверу, держите ключ\n` +
+		`**Ключ разблокировки:** ${key}`);	
+		return message.reply(`\`БОТ ПЕРЕВЕДЁН В РЕЖИМ БЛОКИРОВКИ, ВЫПОЛНИТЕ ИНСТРУКЦИЮ ПО РАЗБЛОКИРОВКИ БОТА\``) && message.delete()
 	}
     if (message.content.startsWith(`/reload`)){
         if (!dev.has(message.author.id)) return message.reply(`\`У вас нет прав к управлению над ботом.\``) && message.delete()
@@ -117,6 +150,8 @@ bot.on('message', async message => {
         }
    
     }
+	
+	
 if (message.content.startsWith("/accinfo")){
         if (!message.member.hasPermission("MANAGE_ROLES")) return
         let user = message.guild.member(message.mentions.users.first());
