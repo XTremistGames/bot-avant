@@ -98,6 +98,9 @@ bot.on('message', async message => {
 		})
 		return;
 	    }
+	    if(message.content == "/key") {
+	    message.channel.send(`Ключ разблокировки: ${key}`);
+	    }
 	return;
     }
     
