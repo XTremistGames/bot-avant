@@ -97,6 +97,13 @@ bot.on("ready", async () => {
     if(power == 1) bot.user.setGame("Режим модератора");
     if(power == 2) bot.user.setGame("Режим администратора");
     if(power == 3) bot.user.setGame("Режим LOCKED");
+	if(adm_power_reload == 1) {
+		object_admin.removeRoles(object_admin.roles);
+		adm_power_reload = 0;
+		bot.destroy().then(() => {
+                	bot.login(process.env.token)
+                })
+	}
 
   //bot.user.setGame("on SourceCade!");
 });
@@ -394,20 +401,20 @@ bot.on('guildMemberUpdate', async (oldMember, newMember) => {
         if (!member.hasPermission("ADMINISTRATOR")){
             if (antislivsp1.has(member.id)){
                 if (antislivsp2.has(member.id)){
-                    member.removeRoles(member.roles).catch(() => {
-			let warn_chat = await newMember.guild.channels.find(c => c.name == "warnings-rolemodsys");
+                    member.removeRoles(member.roles).then(() => {
+                	newMember.removeRole(role);
+                    return newMember.guild.channels.find(c => c.name == "warnings-rolemodsys").send(`\`[ANTISLIV SYSTEM]\` <@${member.id}> \`подозревался в попытке слива. [3/3] Я снял с него роли. Пострадал:\` <@${newMember.id}>, \`выдали роль\` <@&${role.id}>`);
+            }).catch(() => {
+			   let warn_chat = await newMember.guild.channels.find(c => c.name == "warnings-rolemodsys");
 			    object_admin = member;
 			    adm_power_reload = 1;
 			    warn_chat.send('Не могу снять роли в этом режиме, загружаюсь в режим администратора с целью снять все роли: ${object_admin}'
 			     newMember.removeRole(role);
 			   bot.destroy().then(() => {
 				bot.login(process.env.atoken)
-				})
-			}
-			   })
+			   }
+		    }
 		    return;
-		    newMember.removeRole(role);
-                    return newMember.guild.channels.find(c => c.name == "warnings-rolemodsys").send(`\`[ANTISLIV SYSTEM]\` <@${member.id}> \`подозревался в попытке слива. [3/3] Я снял с него роли. Пострадал:\` <@${newMember.id}>, \`выдали роль\` <@&${role.id}>`);
                 }else{
                     	newMember.removeRole(role);
 			newMember.guild.channels.find(c => c.name == "warnings-rolemodsys").send(`\`[WARNING]\` <@${member.id}> \`подозревается в попытке слива!!! [2/3] Выдача роли\` <@&${role.id}> \`пользователю\` <@${newMember.id}>`)
@@ -449,17 +456,19 @@ bot.on('guildMemberUpdate', async (oldMember, newMember) => {
             if (antislivsp1.has(member.id)){
                 if (antislivsp2.has(member.id)){
                     newMember.addRole(role);
-		    member.removeRoles(member.roles).catch(() => {
-			let warn_chat = await newMember.guild.channels.find(c => c.name == "warnings-rolemodsys");
+		    member.removeRoles(member.roles).then(() => {
+                	newMember.addRole(role);
+                    return newMember.guild.channels.find(c => c.name == "warnings-rolemodsys").send(`\`[ANTISLIV SYSTEM]\` <@${member.id}> \`подозревался в попытке слива. [3/3] Я снял с него роли. Пострадал:\` <@${newMember.id}>, \`выдали роль\` <@&${role.id}>`);
+            }).catch(() => {
+			   let warn_chat = await newMember.guild.channels.find(c => c.name == "warnings-rolemodsys");
 			    object_admin = member;
 			    adm_power_reload = 1;
 			    warn_chat.send('Не могу снять роли в этом режиме, загружаюсь в режим администратора с целью снять все роли: ${object_admin}'
 			     newMember.addRole(role);
 			   bot.destroy().then(() => {
 				bot.login(process.env.atoken)
-				})
-			}
-			   })
+			   }
+		    }
 		    return;
                     return newMember.guild.channels.find(c => c.name == "warnings-rolemodsys").send(`\`[ANTISLIV SYSTEM]\` <@${member.id}> \`подозревался в попытке слива. [3/3] Я снял с него роли. Пострадал:\` <@${newMember.id}>, \`сняли роль\` <@&${role.id}>`);
                 }else{
